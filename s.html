@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shrinidhi GCN</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Palatino', 'Book Antiqua', serif;
+      background: url("madam.jpg") center/cover no-repeat fixed;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+    }
+
+    .birthday-container {
+      background: transparent;
+      max-width: 700px;
+      width: 90%;
+      position: relative;
+      z-index: 3;
+      padding: 50px 40px;
+      text-align: center;
+    }
+
+    /* FADE + ZOOM animation */
+    @keyframes fadeZoom {
+      0% {
+        opacity: 0;
+        transform: scale(0.7) translateY(50px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    /* GLOW effect animation */
+    @keyframes glowPulse {
+      0% {
+        text-shadow: 0 0 5px #fff, 0 0 10px #ff6, 0 0 20px #f6f, 0 0 30px #f6f;
+      }
+      50% {
+        text-shadow: 0 0 10px #fff, 0 0 20px #ff0, 0 0 40px #ff00ff, 0 0 60px #ff00ff;
+      }
+      100% {
+        text-shadow: 0 0 5px #fff, 0 0 10px #ff6, 0 0 20px #f6f, 0 0 30px #f6f;
+      }
+    }
+
+    h1, .subtitle, .cake-icon {
+      opacity: 0;
+      animation: fadeZoom 1.2s ease forwards;
+    }
+
+    h1 {
+      animation-delay: 0.3s;
+      font-size: 3.5rem;
+      color: #ffffff;
+      margin-bottom: 10px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      /* Glow Pulse */
+      animation: fadeZoom 1.2s ease forwards, glowPulse 2.5s infinite alternate ease-in-out;
+    }
+
+    .subtitle {
+      animation-delay: 0.8s;
+      font-size: 2rem;
+      color: #fff;
+      margin-bottom: 30px;
+      font-style: italic;
+      font-weight: 300;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    .cake-icon {
+      animation-delay: 1.3s;
+      font-size: 4rem;
+      margin: 20px 0;
+      filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+    }
+
+    /* Typewriter message */
+    .message {
+      font-size: 1.3rem;
+      color: #fff;
+      line-height: 1.8;
+      margin: 30px 0;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+      font-weight: 400;
+      border-right: 2px solid #fff;
+      display: inline-block;
+      white-space: pre-wrap;
+      overflow: hidden;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+      .subtitle {
+        font-size: 1.3rem;
+      }
+      .message {
+        font-size: 1.05rem;
+      }
+    }
+
+    /* CONFETTI */
+    .confetti {
+      position: fixed;
+      top: -10px;
+      width: 10px;
+      height: 10px;
+      background-color: red;
+      opacity: 0.8;
+      z-index: 2;
+      animation: fall linear forwards;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="birthday-container">
+    <h1>"Happy Birthday Madam"</h1>
+    <div class="cake-icon"></div>
+    <div class="message" id="typewriter"></div>
+  </div>
+
+  <script>
+    // TYPEWRITER EFFECT
+    const messageText = "ನಿಮಗೆ ಸಂತೋಷ, ನಗು ಮತ್ತು ಸುಂದರ ಕ್ಷಣಗಳಿಂದ ತುಂಬಿದ ಅದ್ಭುತ ಹುಟ್ಟುಹಬ್ಬದ ಶುಭಾಶಯಗಳು.\nMay your day be as special as you are.";
+    const messageElement = document.getElementById("typewriter");
+    let i = 0;
+
+    function typeWriter() {
+      if (i < messageText.length) {
+        messageElement.textContent += messageText.charAt(i);
+        i++;
+        setTimeout(typeWriter, 70); // typing speed
+      } else {
+        messageElement.style.borderRight = "none"; // remove cursor at end
+      }
+    }
+    setTimeout(typeWriter, 2000);
+
+    // CONFETTI
+    const colors = ["#ff0", "#f0f", "#0ff", "#0f0", "#f00", "#00f", "#ffa500"];
+    function createConfetti() {
+      const confetti = document.createElement("div");
+      confetti.classList.add("confetti");
+      document.body.appendChild(confetti);
+
+      confetti.style.left = Math.random() * window.innerWidth + "px";
+      confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.opacity = Math.random();
+
+      const size = Math.random() * 8 + 5;
+      confetti.style.width = size + "px";
+      confetti.style.height = size + "px";
+
+      const duration = Math.random() * 3 + 2;
+      confetti.style.animationDuration = duration + "s";
+
+      setTimeout(() => {
+        confetti.remove();
+      }, duration * 1000);
+    }
+    setInterval(createConfetti, 150);
+  </script>
+</body>
+</html>
