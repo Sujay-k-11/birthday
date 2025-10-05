@@ -19,6 +19,7 @@
       justify-content: center;
       align-items: center;
       overflow: hidden;
+      transition: background 0.5s ease-in-out;
     }
 
     body::before {
@@ -42,7 +43,6 @@
       text-align: center;
     }
 
-    /* FADE + ZOOM animation */
     @keyframes fadeZoom {
       0% {
         opacity: 0;
@@ -54,7 +54,6 @@
       }
     }
 
-    /* GLOW effect animation */
     @keyframes glowPulse {
       0% {
         text-shadow: 0 0 5px #fff, 0 0 10px #ff6, 0 0 20px #f6f, 0 0 30px #f6f;
@@ -79,7 +78,6 @@
       margin-bottom: 10px;
       font-weight: 400;
       letter-spacing: 2px;
-      /* Glow Pulse */
       animation: fadeZoom 1.2s ease forwards, glowPulse 2.5s infinite alternate ease-in-out;
     }
 
@@ -100,7 +98,6 @@
       filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
     }
 
-    /* Typewriter message */
     .message {
       font-size: 1.3rem;
       color: #fff;
@@ -115,18 +112,11 @@
     }
 
     @media (max-width: 768px) {
-      h1 {
-        font-size: 2.2rem;
-      }
-      .subtitle {
-        font-size: 1.3rem;
-      }
-      .message {
-        font-size: 1.05rem;
-      }
+      h1 { font-size: 2.2rem; }
+      .subtitle { font-size: 1.3rem; }
+      .message { font-size: 1.05rem; }
     }
 
-    /* CONFETTI */
     .confetti {
       position: fixed;
       top: -10px;
@@ -143,12 +133,41 @@
         transform: translateY(110vh) rotate(360deg);
       }
     }
+
+    /* Background Upload Button */
+    .upload-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 4;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      border: 2px solid #fff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .upload-btn:hover {
+      background: rgba(255,255,255,0.4);
+      color: #000;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
   </style>
 </head>
 <body>
+  <button class="upload-btn" onclick="document.getElementById('bgInput').click()">Choose Background</button>
+  <input type="file" id="bgInput" accept="image/*">
+
   <div class="birthday-container">
     <h1>"Happy Birthday Madam"</h1>
-    <div class="cake-icon"></div>
+    <div class="cake-icon">🎂</div>
     <div class="message" id="typewriter"></div>
   </div>
 
@@ -162,14 +181,14 @@
       if (i < messageText.length) {
         messageElement.textContent += messageText.charAt(i);
         i++;
-        setTimeout(typeWriter, 70); // typing speed
+        setTimeout(typeWriter, 70);
       } else {
-        messageElement.style.borderRight = "none"; // remove cursor at end
+        messageElement.style.borderRight = "none";
       }
     }
     setTimeout(typeWriter, 2000);
 
-    // CONFETTI
+    // CONFETTI EFFECT
     const colors = ["#ff0", "#f0f", "#0ff", "#0f0", "#f00", "#00f", "#ffa500"];
     function createConfetti() {
       const confetti = document.createElement("div");
@@ -192,6 +211,18 @@
       }, duration * 1000);
     }
     setInterval(createConfetti, 150);
+
+    // CUSTOM BACKGROUND IMAGE
+    document.getElementById('bgInput').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.body.style.backgroundImage = `url(${e.target.result})`;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
   </script>
 </body>
 </html>
